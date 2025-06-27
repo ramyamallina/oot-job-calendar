@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OOT Job Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+    body.dark-mode .fc-daygrid-day-number,
+    body.dark-mode .fc-col-header-cell-cushion {
+      color: white !important;
+    }
+    .fc-event-title {
+      display: block;
+      font-weight: bold;
+    }
+    .fc-event-note {
+      display: block;
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    .fc-event.columbia .fc-event-main {
+    color: black !important;
+    }
+    #calendar {
+      margin-top: 40px;
+    }
+    .fc-event .fc-event-main {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+    .fc-event .fc-event-title {
+      margin-bottom: 2px;
+    }
+    .fc-event .fc-event-note {
+      font-size: 10px;
+      line-height: 1.1;
+    }
+
+        /* Force calendar header and day cells to stay visible in dark mode */
+    body.dark-mode .fc .fc-col-header-cell-cushion,
+    body.dark-mode .fc .fc-daygrid-day-number {
+    color: white !important;
+    }
+
+    /* Ensure background of calendar in dark mode is not white */
+    body.dark-mode #calendar {
+    background-color: #1e1e1e !important;
+    color: white !important;
+    }
+
+    /* Fix border colors in dark mode */
+    body.dark-mode .fc-theme-standard td,
+    body.dark-mode .fc-theme-standard th {
+    border-color: #444 !important;
+    }
+
+    /* Keep event text readable */
+    body.dark-mode .fc-event .fc-event-main {
+    color: white !important;
+    }
+
+    /* Keep Columbia events black text regardless */
+    body.dark-mode .fc-event.columbia .fc-event-main {
+    color: black !important;
+    }
+
+    </style>
+    </head>
+    <body>
+    <div id="modeToggle">
+        <label class="switch">
+        <input type="checkbox" id="darkModeSwitch" />
+        <span class="slider"></span>
+        </label>
+    </div>
+
+  <h1>OOT Job Calendar</h1>
+
+  <form id="jobForm">
+    <input type="text" id="jobName" placeholder="Job Name" required />
+    <input type="date" id="jobDate" required />
+    <select id="jobStatus" required>
+      <option value="waiting">❓ Waiting</option>
+      <option value="charlotte">Charlotte</option>
+      <option value="asheville">Asheville</option>
+      <option value="charleston">Charleston</option>
+      <option value="columbia">Columbia</option>
+      <option value="greensboro">Greensboro</option>
+      <option value="greenville">Greenville</option>
+      <option value="raleigh">Raleigh</option>
+      <option value="wilmington">Wilmington</option>
+    </select>
+    <input type="text" id="jobNote" placeholder="Notes..." />
+    <button type="submit">Add Job</button>
+  </form>
+
+  <div id="calendar"></div>
+
+  <div id="legend">
+    <h3>Color Key</h3>
+    <ul>
+      <li><span class="color-box waiting"></span> Waiting</li>
+      <li><span class="color-box charlotte"></span> Charlotte</li>
+      <li><span class="color-box asheville"></span> Asheville</li>
+      <li><span class="color-box charleston"></span> Charleston</li>
+      <li><span class="color-box columbia"></span> Columbia</li>
+      <li><span class="color-box greensboro"></span> Greensboro</li>
+      <li><span class="color-box greenville"></span> Greenville</li>
+      <li><span class="color-box raleigh"></span> Raleigh</li>
+      <li><span class="color-box wilmington"></span> Wilmington</li>
+    </ul>
+  </div>
+
+  <!-- Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h3>Edit Job</h3>
+      <input type="text" id="editName" />
+      <input type="date" id="editDate" />
+      <select id="editStatus">
+        <option value="waiting">❓ Waiting</option>
+        <option value="charlotte">Charlotte</option>
+        <option value="asheville">Asheville</option>
+        <option value="charleston">Charleston</option>
+        <option value="columbia">Columbia</option>
+        <option value="greensboro">Greensboro</option>
+        <option value="greenville">Greenville</option>
+        <option value="raleigh">Raleigh</option>
+        <option value="wilmington">Wilmington</option>
+      </select>
+      <input type="text" id="editNote" placeholder="Notes..." />
+      <div class="modal-buttons">
+        <button id="saveEdit">Save</button>
+        <button id="deleteJob" class="danger">Delete</button>
+        <button id="cancelEdit">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
