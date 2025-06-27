@@ -52,16 +52,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
-    events: jobs.map(job => ({
-      id: job.id,
-      title: job.title,
-      start: job.start,
-      allDay: true,
-      extendedProps: {
-        status: job.status,
-        note: job.note || ''
+    editable: true,
+    eventSources: [
+      {
+        url: '/api/jobs',
+        method: 'GET',
+        failure: () => alert('Failed to fetch jobs.'),
       }
-    })),
+    ],
     eventClick: function (info) {
       const job = jobs.find(j => j.id === info.event.id);
       if (!job) return;
@@ -95,6 +93,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   calendar.render();
 
+  // 🔁 Auto-refresh calendar every 10 seconds
+  setInterval(() => {
+    calendar.refetchEvents();
+  }, 10000);
+
   jobForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     const name = document.getElementById('jobName').value;
@@ -103,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const note = document.getElementById('jobNote').value;
 
     const newJob = {
-      id: Date.now().toString(), // Generates a unique ID
+      id: Date.now().toString(),
       title: name,
       start: date,
       status,
