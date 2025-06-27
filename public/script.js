@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   const editStatus = document.getElementById('editStatus');
   const editNote = document.getElementById('editNote');
   const switchEl = document.getElementById('darkModeSwitch');
-  const refreshBtn = document.getElementById('refreshBtn');
   let currentEditId = null;
 
   if (localStorage.getItem('darkMode') === 'true') {
@@ -114,8 +113,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
     });
   }
-
-  refreshBtn.addEventListener('click', reloadCalendar);
 
   jobForm.addEventListener('submit', async function (e) {
     e.preventDefault();
