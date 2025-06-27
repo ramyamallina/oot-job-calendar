@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const editStatus = document.getElementById('editStatus');
   const editNote = document.getElementById('editNote');
   const switchEl = document.getElementById('darkModeSwitch');
+  const refreshBtn = document.getElementById('refreshBtn');
   let currentEditId = null;
 
   if (localStorage.getItem('darkMode') === 'true') {
@@ -52,14 +53,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
-    editable: true,
-    eventSources: [
-      {
-        url: '/api/jobs',
-        method: 'GET',
-        failure: () => alert('Failed to fetch jobs.'),
+    events: jobs.map(job => ({
+      id: job.id,
+      title: job.title,
+      start: job.start,
+      allDay: true,
+      extendedProps: {
+        status: job.status,
+        note: job.note || ''
       }
-    ],
+    })),
     eventClick: function (info) {
       const job = jobs.find(j => j.id === info.event.id);
       if (!job) return;
@@ -93,10 +96,26 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   calendar.render();
 
-  // 🔁 Auto-refresh calendar every 10 seconds
-  setInterval(() => {
-    calendar.refetchEvents();
-  }, 10000);
+  async function reloadCalendar() {
+    const newJobs = await fetchJobs();
+    jobs = newJobs;
+
+    calendar.removeAllEvents();
+    newJobs.forEach(job => {
+      calendar.addEvent({
+        id: job.id,
+        title: job.title,
+        start: job.start,
+        allDay: true,
+        extendedProps: {
+          status: job.status,
+          note: job.note || ''
+        }
+      });
+    });
+  }
+
+  refreshBtn.addEventListener('click', reloadCalendar);
 
   jobForm.addEventListener('submit', async function (e) {
     e.preventDefault();
